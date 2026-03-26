@@ -1,5 +1,5 @@
 // Variables globales
-let colorActual = '#ff0000';
+let colorActual = '#e74c3c';
 let textoActual = '';
 
 // --- Escena Three.js ---
@@ -31,14 +31,13 @@ controls.enableDamping = true;
 
 // Carga del modelo GLTF
 const loader = new THREE_ADDONS.GLTFLoader();
-let modeloMesh = null; // referencia al mesh objetivo
+let modeloMesh = null;
 
 loader.load(
   '/assets/modelo.gltf',
   (gltf) => {
     scene.add(gltf.scene);
 
-    // Buscar mesh llamado "Bloque"; si no, usar el primero que se encuentre
     let primero = null;
     gltf.scene.traverse((obj) => {
       if (obj.isMesh) {
@@ -48,20 +47,27 @@ loader.load(
     });
     if (!modeloMesh) modeloMesh = primero;
 
-    // Aplicar color inicial
     aplicarColor(colorActual);
   },
   undefined,
   (err) => console.error('Error cargando modelo.gltf:', err)
 );
 
-// --- Funciones públicas ---
+// --- Funciones ---
 
 function aplicarColor(hex) {
   colorActual = hex;
-  if (!modeloMesh) return;
 
-  // Si hay múltiples meshes con nombre "Bloque", recorremos todos
+  // Sincronizar el input de color libre con el color activo
+  const colorLibre = document.getElementById('color-libre');
+  if (colorLibre) colorLibre.value = hex;
+
+  // Marcar el botón activo
+  document.querySelectorAll('.color-btn').forEach((btn) => {
+    btn.classList.toggle('activo', btn.dataset.color === hex);
+  });
+
+  if (!modeloMesh) return;
   scene.traverse((obj) => {
     if (obj.isMesh && (obj.name === 'Bloque' || obj === modeloMesh)) {
       if (Array.isArray(obj.material)) {
@@ -78,8 +84,8 @@ function actualizarTexto(texto, fuente, estilo) {
   const preview = document.getElementById('texto-preview');
   if (!preview) return;
   preview.textContent = texto || '';
-  if (fuente)  preview.style.fontFamily = fuente;
-  if (estilo)  preview.style.fontStyle  = estilo;
+  if (fuente) preview.style.fontFamily = fuente;
+  if (estilo) preview.style.fontStyle  = estilo;
 }
 
 // --- Loop de renderizado ---
@@ -99,25 +105,90 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 
-// --- Eventos del formulario ---
-document.getElementById('color-picker')?.addEventListener('input', (e) => {
+// --- Eventos: colores predefinidos ---
+document.querySelectorAll('.color-btn').forEach((btn) => {
+  btn.addEventListener('click', () => aplicarColor(btn.dataset.color));
+});
+
+document.getElementById('color-libre').addEventListener('input', (e) => {
+  // Quitar activo de botones predefinidos al usar color libre
+  document.querySelectorAll('.color-btn').forEach((b) => b.classList.remove('activo'));
   aplicarColor(e.target.value);
 });
 
-document.getElementById('texto-input')?.addEventListener('input', (e) => {
-  const fuente = document.getElementById('fuente-select')?.value;
-  const estilo = document.getElementById('estilo-select')?.value;
-  actualizarTexto(e.target.value, fuente, estilo);
+// Seleccionar el primer color por defecto
+aplicarColor(colorActual);
+
+// --- Eventos: texto ---
+const textoInput   = document.getElementById('texto-input');
+const charCount    = document.getElementById('char-count');
+const fuenteSelect = document.getElementById('fuente-select');
+const estiloSelect = document.getElementById('estilo-select');
+
+textoInput.addEventListener('input', () => {
+  charCount.textContent = textoInput.value.length;
+  actualizarTexto(textoInput.value, fuenteSelect.value, estiloSelect.value);
 });
 
-document.getElementById('fuente-select')?.addEventListener('change', (e) => {
-  const texto = document.getElementById('texto-input')?.value;
-  const estilo = document.getElementById('estilo-select')?.value;
-  actualizarTexto(texto, e.target.value, estilo);
+fuenteSelect.addEventListener('change', () => {
+  actualizarTexto(textoInput.value, fuenteSelect.value, estiloSelect.value);
 });
 
-document.getElementById('estilo-select')?.addEventListener('change', (e) => {
-  const texto = document.getElementById('texto-input')?.value;
-  const fuente = document.getElementById('fuente-select')?.value;
-  actualizarTexto(texto, fuente, e.target.value);
+estiloSelect.addEventListener('change', () => {
+  actualizarTexto(textoInput.value, fuenteSelect.value, estiloSelect.value);
 });
+
+// --- Envío del pedido ---
+document.getElementById('btn-enviar').addEventListener('click', async () => {
+  const nombre = document.getElementById('nombre-cliente').value.trim();
+  const email  = document.getElementById('email-cliente').value.trim();
+  const feedback = document.getElementById('mensaje-feedback');
+  const spinner  = document.getElementById('spinner');
+
+  // Validación
+  if (!nombre || !email) {
+    mostrarFeedback('Por favor, rellena tu nombre y email.', 'error');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    mostrarFeedback('El email no tiene un formato válido.', 'error');
+    return;
+  }
+
+  // Mostrar spinner
+  spinner.classList.remove('hidden');
+  feedback.classList.add('hidden');
+  document.getElementById('btn-enviar').disabled = true;
+
+  try {
+    const res = await fetch('/api/enviar-pedido', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        colorHex:      colorActual,
+        texto:         textoActual,
+        nombreCliente: nombre,
+        emailCliente:  email,
+        fechaPedido:   new Date().toISOString(),
+      }),
+    });
+
+    if (res.ok) {
+      mostrarFeedback('¡Pedido enviado con éxito! Revisa tu correo.', 'exito');
+    } else {
+      const data = await res.json().catch(() => ({}));
+      mostrarFeedback(data.mensaje || 'Error del servidor. Inténtalo de nuevo.', 'error');
+    }
+  } catch {
+    mostrarFeedback('No se pudo conectar con el servidor.', 'error');
+  } finally {
+    spinner.classList.add('hidden');
+    document.getElementById('btn-enviar').disabled = false;
+  }
+});
+
+function mostrarFeedback(texto, tipo) {
+  const el = document.getElementById('mensaje-feedback');
+  el.textContent = texto;
+  el.className = `mensaje-feedback ${tipo}`;
+}
