@@ -86,14 +86,14 @@ app.post('/api/enviar-pedido', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     await transporter.sendMail({
-      from:    `"Pedidos 3D" <${process.env.GMAIL_USER}>`,
-      to:      process.env.DESTINATARIO_EMAIL,
+      from:    `"Pedidos 3D" <${process.env.EMAIL_USER}>`,
+      to:      process.env.EMAIL_DESTINO,
       subject: `Nuevo pedido de ${nombreCliente}`,
       html:    buildHtml({ colorHex, texto, nombreCliente, emailCliente, fechaPedido }),
       attachments: [
