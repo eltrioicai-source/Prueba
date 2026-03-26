@@ -21,46 +21,60 @@
       <h1>Personaliza tu pieza</h1>
 
       <!-- COLOR -->
-      <label>Color del bloque</label>
-      <div class="colores-predefinidos">
-        <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c" title="Rojo"></button>
-        <button class="color-btn" data-color="#3498db" style="background:#3498db" title="Azul"></button>
-        <button class="color-btn" data-color="#2ecc71" style="background:#2ecc71" title="Verde"></button>
-        <button class="color-btn" data-color="#1a1a1a" style="background:#1a1a1a" title="Negro"></button>
-        <button class="color-btn" data-color="#ffffff" style="background:#ffffff" title="Blanco"></button>
-        <button class="color-btn" data-color="#f1c40f" style="background:#f1c40f" title="Amarillo"></button>
-        <button class="color-btn" data-color="#e67e22" style="background:#e67e22" title="Naranja"></button>
-        <button class="color-btn" data-color="#9b59b6" style="background:#9b59b6" title="Morado"></button>
-        <input type="color" id="color-libre" value="#e74c3c" title="Color libre" />
+      <div class="campo">
+        <label>Color del bloque</label>
+        <div class="colores-predefinidos">
+          <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c" title="Rojo"></button>
+          <button class="color-btn" data-color="#3498db" style="background:#3498db" title="Azul"></button>
+          <button class="color-btn" data-color="#2ecc71" style="background:#2ecc71" title="Verde"></button>
+          <button class="color-btn" data-color="#1a1a1a" style="background:#1a1a1a" title="Negro"></button>
+          <button class="color-btn" data-color="#ffffff" style="background:#ffffff" title="Blanco"></button>
+          <button class="color-btn" data-color="#f1c40f" style="background:#f1c40f" title="Amarillo"></button>
+          <button class="color-btn" data-color="#e67e22" style="background:#e67e22" title="Naranja"></button>
+          <button class="color-btn" data-color="#9b59b6" style="background:#9b59b6" title="Morado"></button>
+          <input type="color" id="color-libre" value="#e74c3c" title="Color libre" />
+        </div>
       </div>
 
       <!-- TEXTO -->
-      <label for="texto-input">Mensaje personalizado</label>
-      <input type="text" id="texto-input" placeholder="Escribe aquí..." maxlength="60" />
-      <span class="char-counter"><span id="char-count">0</span>/60</span>
+      <div class="campo">
+        <label for="texto-input">Mensaje personalizado</label>
+        <input type="text" id="texto-input" placeholder="Escribe aquí..." maxlength="60" />
+        <span class="char-counter"><span id="char-count">0</span>/60</span>
+      </div>
 
       <!-- FUENTE Y ESTILO -->
-      <label for="fuente-select">Fuente</label>
-      <select id="fuente-select">
-        <option value="'Times New Roman', serif">Times New Roman</option>
-        <option value="Arial, sans-serif">Arial</option>
-        <option value="Georgia, serif">Georgia</option>
-        <option value="'Courier New', monospace">Courier New</option>
-      </select>
+      <div class="campo">
+        <label for="fuente-select">Fuente</label>
+        <select id="fuente-select">
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="'Courier New', monospace">Courier New</option>
+        </select>
+      </div>
 
-      <label for="estilo-select">Estilo</label>
-      <select id="estilo-select">
-        <option value="normal">Normal</option>
-        <option value="italic">Itálica</option>
-        <option value="oblique">Oblicua</option>
-      </select>
+      <div class="campo">
+        <label for="estilo-select">Estilo</label>
+        <select id="estilo-select">
+          <option value="normal">Normal</option>
+          <option value="italic">Itálica</option>
+          <option value="oblique">Oblicua</option>
+        </select>
+      </div>
+
+      <div class="divisor"></div>
 
       <!-- DATOS DEL CLIENTE -->
-      <label for="nombre-cliente">Nombre <span class="req">*</span></label>
-      <input type="text" id="nombre-cliente" placeholder="Tu nombre completo" />
+      <div class="campo">
+        <label for="nombre-cliente">Nombre <span class="req">*</span></label>
+        <input type="text" id="nombre-cliente" placeholder="Tu nombre completo" />
+      </div>
 
-      <label for="email-cliente">Email <span class="req">*</span></label>
-      <input type="email" id="email-cliente" placeholder="tu@email.com" />
+      <div class="campo">
+        <label for="email-cliente">Email <span class="req">*</span></label>
+        <input type="email" id="email-cliente" placeholder="tu@email.com" />
+      </div>
 
       <!-- ENVÍO -->
       <button id="btn-enviar" type="button">Enviar mi diseño</button>

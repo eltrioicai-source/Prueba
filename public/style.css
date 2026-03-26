@@ -1,176 +1,246 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #e8e8e8;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #fff;
+  color: #1a1a1a;
   min-height: 100vh;
 }
 
+/* ── Contenedor principal ─────────────────────────────────────────── */
 .layout {
   display: flex;
-  gap: 24px;
-  padding: 24px;
-  max-width: 1100px;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 20px 48px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-/* Visor 3D */
+/* ── Visor 3D ─────────────────────────────────────────────────────── */
 .visor {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 #canvas3d {
   width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: 8px;
+  min-height: 420px;
+  border-radius: 16px;
   display: block;
-  background: #f0f0f0;
+  background: #f5f5f5;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, .10);
 }
 
 .texto-preview {
-  min-height: 48px;
-  padding: 10px 16px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1.3rem;
+  min-height: 52px;
+  padding: 12px 18px;
+  background: #fafafa;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1.35rem;
   font-family: 'Times New Roman', serif;
   color: #222;
   word-break: break-word;
+  transition: border-color .2s;
 }
 
-/* Panel de controles */
+/* ── Panel de controles ───────────────────────────────────────────── */
 .panel {
-  width: 280px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  align-self: flex-start;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  gap: 18px;
 }
 
 .panel h1 {
-  font-size: 1.1rem;
-  margin-bottom: 4px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: #111;
 }
 
 .panel label {
-  font-size: .85rem;
+  display: block;
+  font-size: .88rem;
   font-weight: 600;
-  color: #555;
+  color: #444;
+  margin-bottom: 6px;
+  letter-spacing: .01em;
+  text-transform: uppercase;
 }
 
 .panel label .req { color: #e74c3c; }
 
+/* Grupo visual para cada sección del formulario */
+.campo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Inputs y selects ─────────────────────────────────────────────── */
 .panel input[type="text"],
 .panel input[type="email"],
 .panel select {
   width: 100%;
-  padding: 7px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: .95rem;
+  padding: 14px 16px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none;
 }
 
-/* Colores predefinidos */
+.panel input[type="text"]:focus,
+.panel input[type="email"]:focus,
+.panel select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+/* ── Colores predefinidos ─────────────────────────────────────────── */
 .colores-predefinidos {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
 .color-btn {
-  width: 30px;
-  height: 30px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 1.5px solid rgba(0, 0, 0, .12);
   cursor: pointer;
-  transition: transform .15s, border-color .15s;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform .15s;
+  outline: none;
+}
+
+/* Anillo de selección visible */
+.color-btn::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  transition: border-color .15s;
+}
+
+.color-btn:hover { transform: scale(1.1); }
+
+.color-btn.activo::after { border-color: #2563eb; }
+
+/* Input color libre con mismo tamaño que los círculos */
+#color-libre {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, .12);
+  cursor: pointer;
+  padding: 2px;
+  background: none;
+  overflow: hidden;
   flex-shrink: 0;
 }
 
-.color-btn:hover  { transform: scale(1.15); }
-.color-btn.activo { border-color: #2563eb; transform: scale(1.15); }
-
-#color-libre {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  cursor: pointer;
-  padding: 0;
-  background: none;
-  overflow: hidden;
-}
-
-/* Contador de caracteres */
+/* ── Contador de caracteres ───────────────────────────────────────── */
 .char-counter {
-  font-size: .78rem;
-  color: #888;
+  font-size: .8rem;
+  color: #999;
   text-align: right;
-  margin-top: -6px;
+  margin-top: 4px;
 }
 
-/* Botón enviar */
+/* ── Divisor ──────────────────────────────────────────────────────── */
+.divisor {
+  height: 1px;
+  background: #ebebeb;
+  margin: 2px 0;
+}
+
+/* ── Botón de envío ───────────────────────────────────────────────── */
 #btn-enviar {
-  margin-top: 6px;
-  padding: 12px;
+  width: 100%;
+  height: 56px;
   background: #2563eb;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .01em;
   cursor: pointer;
-  transition: background .2s;
+  transition: background .2s, transform .1s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, .35);
 }
 
-#btn-enviar:hover:not(:disabled) { background: #1d4ed8; }
-#btn-enviar:disabled { opacity: .6; cursor: not-allowed; }
+#btn-enviar:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, .45);
+  transform: translateY(-1px);
+}
 
-/* Spinner */
+#btn-enviar:active:not(:disabled) { transform: translateY(0); }
+
+#btn-enviar:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ── Spinner ──────────────────────────────────────────────────────── */
 .spinner {
-  width: 28px;
-  height: 28px;
-  border: 3px solid #d1d5db;
+  width: 36px;
+  height: 36px;
+  border: 4px solid #e5e7eb;
   border-top-color: #2563eb;
   border-radius: 50%;
-  animation: spin .7s linear infinite;
-  margin: 0 auto;
+  animation: spin .75s linear infinite;
+  margin: 4px auto;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Feedback */
+/* ── Mensajes de feedback ─────────────────────────────────────────── */
 .mensaje-feedback {
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-size: .9rem;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: .95rem;
+  font-weight: 500;
   text-align: center;
+  line-height: 1.4;
 }
 
 .mensaje-feedback.exito {
-  background: #d1fae5;
+  background: #ecfdf5;
   color: #065f46;
-  border: 1px solid #6ee7b7;
+  border: 1.5px solid #6ee7b7;
 }
 
 .mensaje-feedback.error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
+  background: #fff1f2;
+  color: #9f1239;
+  border: 1.5px solid #fda4af;
 }
 
-.hidden { display: none; }
+/* ── Utilidad ─────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
 
-@media (max-width: 700px) {
-  .layout { flex-direction: column; }
-  .panel  { width: 100%; }
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .layout { padding: 20px 16px 40px; gap: 24px; }
+
+  #canvas3d { min-height: 280px; border-radius: 12px; }
+
+  .panel h1 { font-size: 1.35rem; }
+
+  .color-btn,
+  #color-libre { width: 40px; height: 40px; }
+
+  #btn-enviar { height: 52px; font-size: 1rem; }
 }
