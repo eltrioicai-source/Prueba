@@ -34,7 +34,7 @@ const loader = new THREE_ADDONS.GLTFLoader();
 let modeloMesh = null;
 
 loader.load(
-  '/assets/modelo.gltf',
+  '/assets/modelo.glb',
   (gltf) => {
     scene.add(gltf.scene);
 
@@ -50,7 +50,7 @@ loader.load(
     aplicarColor(colorActual);
   },
   undefined,
-  (err) => console.error('Error cargando modelo.gltf:', err)
+  (err) => console.error('Error cargando modelo.glb:', err)
 );
 
 // --- Funciones ---
