@@ -1,0 +1,104 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #e8e8e8;
+  min-height: 100vh;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Visor 3D */
+.visor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#canvas3d {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  display: block;
+  background: #f0f0f0;
+}
+
+.texto-preview {
+  min-height: 48px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  font-family: 'Times New Roman', serif;
+  color: #222;
+  word-break: break-word;
+}
+
+/* Panel de controles */
+.panel {
+  width: 260px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: flex-start;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.panel h1 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.panel label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.panel input[type="text"],
+.panel select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: .95rem;
+}
+
+.panel input[type="color"] {
+  width: 100%;
+  height: 38px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 2px;
+}
+
+#btn-enviar {
+  margin-top: 8px;
+  padding: 10px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+#btn-enviar:hover { background: #1d4ed8; }
+
+@media (max-width: 700px) {
+  .layout { flex-direction: column; }
+  .panel  { width: 100%; }
+}

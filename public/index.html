@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personalización 3D</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="layout">
+
+    <!-- Visor 3D -->
+    <section class="visor">
+      <canvas id="canvas3d"></canvas>
+      <!-- Preview del texto personalizado -->
+      <div id="texto-preview" class="texto-preview"></div>
+    </section>
+
+    <!-- Panel de controles -->
+    <aside class="panel">
+      <h1>Personaliza tu pieza</h1>
+
+      <label for="color-picker">Color del bloque</label>
+      <input type="color" id="color-picker" value="#ff0000" />
+
+      <label for="texto-input">Texto personalizado</label>
+      <input type="text" id="texto-input" placeholder="Escribe aquí..." maxlength="60" />
+
+      <label for="fuente-select">Fuente</label>
+      <select id="fuente-select">
+        <option value="'Times New Roman', serif">Times New Roman</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Georgia, serif">Georgia</option>
+        <option value="'Courier New', monospace">Courier New</option>
+      </select>
+
+      <label for="estilo-select">Estilo</label>
+      <select id="estilo-select">
+        <option value="normal">Normal</option>
+        <option value="italic">Itálica</option>
+        <option value="oblique">Oblicua</option>
+      </select>
+
+      <button id="btn-enviar" type="button">Enviar por email</button>
+    </aside>
+
+  </main>
+
+  <!-- Three.js r165 desde CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+
+    // Exponer al scope global para que main.js (módulo clásico) pueda usarlos,
+    // o bien hacemos todo inline aquí y mantenemos main.js como módulo ES.
+    window.THREE = THREE;
+    window.THREE_ADDONS = { OrbitControls, GLTFLoader };
+
+    // Cargar main.js tras tener Three disponible
+    const s = document.createElement('script');
+    s.src = 'main.js';
+    document.body.appendChild(s);
+  </script>
+
+</body>
+</html>
